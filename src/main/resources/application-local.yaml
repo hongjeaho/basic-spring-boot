@@ -1,0 +1,30 @@
+spring:
+  jooq:
+    sql-dialect: mysql
+  flyway:
+    enabled: false
+
+kapa:
+  domain:
+    datasource:
+      poolName: platform-domain-cp
+      type: com.zaxxer.hikari.HikariDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbcUrl: "jdbc:mysql://localhost:3306/store?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false"
+      username: root
+      password: root
+      auto-commit: false
+      connectionTimeout: 30000
+      maxLifetime: 1800000
+      maximumPoolSize: 15
+
+
+mybatis:
+  type-aliases-package: com.platform.datasource.platform.jooq.generated.tables.pojos,com.platform.datasource.platform.dto
+  mapper-locations: mybatis-mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    org.jooq.tools.LoggerListener: DEBUG

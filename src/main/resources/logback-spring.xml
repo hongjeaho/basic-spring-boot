@@ -1,0 +1,73 @@
+<configuration>
+  <springProfile name="local">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} >>> [%thread] %-5level %-40logger{36}:: %msg%n</pattern>
+      </encoder>
+    </appender>
+
+    <logger name="org.jooq.tools.LoggerListener" level="DEBUG"/>
+    <logger name="kr.go.kaptnet" level="DEBUG"/>
+
+    <root level="INFO">
+      <appender-ref ref="STDOUT"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="dev, prod">
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>/home/staff/kapanet/logs/app.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>/home/staff/kapanet/logs/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <maxFileSize>100MB</maxFileSize>
+        <maxHistory>30</maxHistory>
+        <totalSizeCap>10GB</totalSizeCap>
+      </rollingPolicy>
+      
+      <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+          <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+          <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
+          <appendLineSeparator>true</appendLineSeparator>
+          <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+            <prettyPrint>false</prettyPrint>
+          </jsonFormatter>
+        </layout>
+      </encoder>
+    </appender>
+
+    <!-- 비동기 래퍼 appender -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="ROLLING_FILE"/>
+      <queueSize>512</queueSize> <!-- 내부 큐 크기 -->
+      <discardingThreshold>0</discardingThreshold> <!-- 큐가 찰 때 버리기 시작하는 임계점 -->
+      <maxFlushTime>5000</maxFlushTime> <!-- 종료시 대기 시간(ms) -->
+      <includeCallerData>false</includeCallerData> <!--호출자 정보 포함 여부 -->
+      <neverBlock>false</neverBlock> <!-- 큐 가득찰 때 블록하지 않기 -->
+    </appender>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="org.jooq.tools.LoggerListener" level="DEBUG"/>
+    <logger name="kr.go.kaptnet" level="DEBUG"/>
+    <logger name="com.mysql" level="WARN" additivity="false">
+      <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="ASYNC"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="prod">
+    <logger name="org.jooq.tools.LoggerListener" level="INFO"/>
+    <logger name="kr.go.kaptnet" level="INFO"/>
+    <logger name="com.mysql" level="WARN" additivity="false">
+      <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <root level="WARN">
+      <appender-ref ref="ASYNC"/>
+    </root>
+  </springProfile>
+</configuration>
