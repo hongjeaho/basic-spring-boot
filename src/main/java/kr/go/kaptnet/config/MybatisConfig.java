@@ -5,7 +5,6 @@ import static kr.go.kaptnet.config.database.KapaDatabaseSource.KAPA_SQL_SESSION_
 
 import java.util.Objects;
 import javax.sql.DataSource;
-import kr.go.kaptnet.config.database.JooqPackageConstants;
 import kr.go.kaptnet.config.database.KapaDatabaseSource;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -53,7 +52,6 @@ public class MybatisConfig {
 
         factory.setDataSource(storeDomainDataSource);
         factory.setVfs(SpringBootVFS.class);
-        factory.setTypeAliasesPackage(JooqPackageConstants.MYBATIS_TYPE_ALIASES_PACKAGE);
         factory.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
         factory.setMapperLocations(
                 applicationContext.getResources("classpath:mybatis-mapper/**/*.xml")
