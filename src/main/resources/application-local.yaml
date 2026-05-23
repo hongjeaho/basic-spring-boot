@@ -1,8 +1,9 @@
 spring:
-  jooq:
-    sql-dialect: mysql
   flyway:
-    enabled: false
+    enabled: false  # 수동 실행만 - 시작 시 자동 마이그레이션 비활성화
+    validate-on-migrate: true
+    locations: classpath:db/migration
+    placeholder-replacement: true
 
 kapa:
   domain:
@@ -18,13 +19,6 @@ kapa:
       maxLifetime: 1800000
       maximumPoolSize: 15
 
-
-mybatis:
-  type-aliases-package: com.platform.datasource.platform.jooq.generated.tables.pojos,com.platform.datasource.platform.dto
-  mapper-locations: mybatis-mapper/**/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-
 logging:
   level:
-    org.jooq.tools.LoggerListener: DEBUG
+    kr.go.kaptnet: DEBUG
