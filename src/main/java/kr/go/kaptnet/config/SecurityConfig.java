@@ -48,7 +48,7 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final ObjectMapper objectMapper;
 	private final JWTCheckFilter jwtCheckFilter;
-	private final OncePerRequestFilter CustomHeaderFilter;
+	private final OncePerRequestFilter customHeaderFilter;
 
 	public SecurityConfig(UserDetailsService userDetailsService,
 			@Qualifier("customHeaderFilter") OncePerRequestFilter customHeaderFilter,
@@ -56,7 +56,7 @@ public class SecurityConfig {
 			ObjectMapper objectMapper) {
 		this.userDetailsService = userDetailsService;
 		this.jwtCheckFilter = jwtCheckFilter;
-		this.CustomHeaderFilter = customHeaderFilter;
+		this.customHeaderFilter = customHeaderFilter;
 		this.objectMapper = objectMapper;
 	}
 
@@ -100,13 +100,13 @@ public class SecurityConfig {
 						authorizeRequests
 								.requestMatchers("/public/swagger-ui/**").permitAll()
 								// Actuator 보안 강화: health 엔드포인트만 공개, 나머지는 인증 필요
-								.requestMatchers("/public/platform/actuator/health", "/public/platform/actuator/health/**").permitAll()
-								.requestMatchers("/public/platform/actuator/**").authenticated()
+								.requestMatchers("/public/kapanet/actuator/health", "/public/kapanet/actuator/health/**").permitAll()
+								.requestMatchers("/public/kapanet/actuator/**").authenticated()
 								.requestMatchers("/error", "/api/public/**").permitAll() // 인증 없이 접근 설정
 								.anyRequest().authenticated()); //  모든 요청에 대해 인증을 요구하도록 설정
 
 		// JWT 토큰 검증 처리
-		http.addFilterBefore(CustomHeaderFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(customHeaderFilter, UsernamePasswordAuthenticationFilter.class);
 		http.addFilterAt(jwtCheckFilter, BasicAuthenticationFilter.class);
 
 		// SecurityContextHolder는 기본 MODE_THREADLOCAL 사용

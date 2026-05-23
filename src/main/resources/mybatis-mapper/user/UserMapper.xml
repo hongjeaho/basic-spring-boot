@@ -5,8 +5,8 @@
 
 <mapper namespace="kr.go.kaptnet.user.mapper.UserMapper">
 
-  <select id="findUserIdByUserSeqNo" resultType="java.lang.Integer">
-    select user_id from user where user_seq_no = #{userSeqNo}
+  <select id="findUserIdByUserId" resultType="kr.go.kaptnet.authority.AuthUser">
+    select user_id from user where user_id = #{userid}
   </select>
 
 </mapper>

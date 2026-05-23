@@ -1,5 +1,6 @@
 package kr.go.kaptnet.authority.service;
 
+import kr.go.kaptnet.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+	private final UserMapper userMapper;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
+		return userMapper.findUserIdByUserSeqNo(username);
 	}
 }

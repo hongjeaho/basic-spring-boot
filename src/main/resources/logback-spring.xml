@@ -6,7 +6,6 @@
       </encoder>
     </appender>
 
-    <logger name="org.jooq.tools.LoggerListener" level="DEBUG"/>
     <logger name="kr.go.kaptnet" level="DEBUG"/>
 
     <root level="INFO">
@@ -48,7 +47,6 @@
   </springProfile>
 
   <springProfile name="dev">
-    <logger name="org.jooq.tools.LoggerListener" level="DEBUG"/>
     <logger name="kr.go.kaptnet" level="DEBUG"/>
     <logger name="com.mysql" level="WARN" additivity="false">
       <appender-ref ref="ASYNC"/>
@@ -60,7 +58,6 @@
   </springProfile>
 
   <springProfile name="prod">
-    <logger name="org.jooq.tools.LoggerListener" level="INFO"/>
     <logger name="kr.go.kaptnet" level="INFO"/>
     <logger name="com.mysql" level="WARN" additivity="false">
       <appender-ref ref="ASYNC"/>
