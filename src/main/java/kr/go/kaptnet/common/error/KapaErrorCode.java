@@ -12,7 +12,7 @@ package kr.go.kaptnet.common.error;
  * - AUTH_REQUIRED: 인증이 필요하지만 인증되지 않은 요청을 나타냄.
  * - FORBIDDEN: 권한이 없는 사용자의 접근 시도를 나타냄.
  */
-public enum ErrorCode {
+public enum KapaErrorCode {
 	VALIDATION_FAILED,
 	INTERNAL_SERVER_ERROR,
 	DATABASE_ERROR,

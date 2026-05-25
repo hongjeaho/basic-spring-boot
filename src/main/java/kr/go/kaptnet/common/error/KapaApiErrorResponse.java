@@ -18,18 +18,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "ApiErrorResponse", title = "에러 응답")
-public class ApiErrorResponse {
+public class KapaApiErrorResponse {
 
 	private boolean success = false;
 	private ErrorBody error;
 	private LocalDateTime timestamp;
 
-	public static ApiErrorResponse of(ErrorCode code, String message) {
+	public static KapaApiErrorResponse of(KapaErrorCode code, String message) {
 		return of(code, message, null);
 	}
 
-	public static ApiErrorResponse of(ErrorCode code, String message, Map<String, String> errors) {
-		return ApiErrorResponse.builder()
+	public static KapaApiErrorResponse of(KapaErrorCode code, String message, Map<String, String> errors) {
+		return KapaApiErrorResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.error(ErrorBody.builder()
 						.code(code.name())
