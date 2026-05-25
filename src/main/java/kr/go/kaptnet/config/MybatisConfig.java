@@ -57,10 +57,11 @@ public class MybatisConfig {
                 applicationContext.getResources("classpath:mybatis-mapper/**/*.xml")
         );
 
-        Objects.requireNonNull(factory.getObject())
+        final SqlSessionFactory sqlSessionFactory = factory.getObject();
+        Objects.requireNonNull(sqlSessionFactory)
                 .getConfiguration()
                 .setMapUnderscoreToCamelCase(true);
 
-        return factory.getObject();
+        return sqlSessionFactory;
     }
 }
