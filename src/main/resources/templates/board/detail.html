@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${board.title}">게시글 상세</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 20px; }
+        .meta { color: #666; font-size: 14px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .content { line-height: 1.6; color: #333; min-height: 300px; white-space: pre-wrap; }
+        .btn-group { margin-top: 30px; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 8px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-secondary:hover { background: #545b62; }
+        .btn-danger:hover { background: #c82333; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${board.title}">게시글 제목</h1>
+
+    <div class="meta">
+        <span>작성자: <strong th:text="${board.author}">홍재호</strong></span> |
+        <span>작성일: <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 00:00</span></span> |
+        <span th:if="${board.updatedAt != board.createdAt}">수정일: <span th:text="${#temporals.format(board.updatedAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 00:00</span></span>
+    </div>
+
+    <div class="content" th:text="${board.content}">게시글 내용</div>
+
+    <div class="btn-group">
+        <a href="/board" class="btn btn-secondary">목록</a>
+        <a th:href="@{/board/{id}/edit(id=${board.id})}" class="btn btn-primary">수정</a>
+        <button type="button" class="btn btn-danger" th:onclick="'confirmDelete(' + ${board.id} + ')'">삭제</button>
+    </div>
+</div>
+
+<form id="deleteForm" th:action="@{/board/{id}/delete(id=${board.id})}" method="post" style="display: none;">
+</form>
+
+<script>
+function confirmDelete(id) {
+    if (confirm('정말 삭제하시겠습니까?')) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 20px; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-secondary:hover { background: #545b62; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        .title-cell { width: 60%; }
+        .author-cell { width: 20%; }
+        .date-cell { width: 20%; }
+        .alert { padding: 12px; border-radius: 4px; margin-bottom: 20px; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>게시판</h1>
+
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="/board/new" class="btn btn-primary">글쓰기</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="title-cell">제목</th>
+                <th class="author-cell">작성자</th>
+                <th class="date-cell">작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="board : ${boards}">
+                <td><a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">제목</a></td>
+                <td th:text="${board.author}">작성자</td>
+                <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 00:00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${#lists.isEmpty(boards)}" style="text-align: center; padding: 40px; color: #666;">
+        등록된 게시글이 없습니다.
+    </div>
+</div>
+</body>
+</html>
