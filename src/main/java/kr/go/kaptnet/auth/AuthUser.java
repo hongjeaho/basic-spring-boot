@@ -1,4 +1,4 @@
-package kr.go.kaptnet.authority;
+package kr.go.kaptnet.auth;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

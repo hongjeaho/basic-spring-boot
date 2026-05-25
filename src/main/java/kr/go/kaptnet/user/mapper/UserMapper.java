@@ -1,6 +1,6 @@
 package kr.go.kaptnet.user.mapper;
 
-import kr.go.kaptnet.authority.AuthUser;
+import kr.go.kaptnet.auth.AuthUser;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

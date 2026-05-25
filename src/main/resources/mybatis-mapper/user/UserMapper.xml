@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.go.kaptnet.user.mapper.UserMapper">
 
-  <select id="findUserIdByUserId" resultType="kr.go.kaptnet.authority.AuthUser">
+  <select id="findUserIdByUserId" resultType="kr.go.kaptnet.auth.AuthUser">
     select user_id from user where user_id = #{userid}
   </select>
 
