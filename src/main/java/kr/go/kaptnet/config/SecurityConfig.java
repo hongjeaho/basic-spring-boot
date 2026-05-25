@@ -3,23 +3,20 @@ package kr.go.kaptnet.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import kr.go.kaptnet.common.error.ApiErrorResponse;
-import kr.go.kaptnet.common.error.ErrorCode;
+import kr.go.kaptnet.common.error.KapaApiErrorResponse;
+import kr.go.kaptnet.common.error.KapaErrorCode;
 import kr.go.kaptnet.config.filter.JWTCheckFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,8 +25,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -135,7 +130,7 @@ public class SecurityConfig {
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.setCharacterEncoding("UTF-8");
 			objectMapper.writeValue(response.getWriter(),
-					ApiErrorResponse.of(ErrorCode.AUTH_REQUIRED, "인증이 필요합니다."));
+					KapaApiErrorResponse.of(KapaErrorCode.AUTH_REQUIRED, "인증이 필요합니다."));
 		};
 	}
 
@@ -146,7 +141,7 @@ public class SecurityConfig {
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.setCharacterEncoding("UTF-8");
 			objectMapper.writeValue(response.getWriter(),
-					ApiErrorResponse.of(ErrorCode.FORBIDDEN, "접근이 거부되었습니다."));
+					KapaApiErrorResponse.of(KapaErrorCode.FORBIDDEN, "접근이 거부되었습니다."));
 		};
 	}
 
