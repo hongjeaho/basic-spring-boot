@@ -2,7 +2,18 @@
         "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <settings>
+        <!-- DB의 snake_case 컬럼을 Java의 camelCase 필드에 자동 매핑 (실무 필수) -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!-- SQL 실행 최대 대기 시간(초). 미설정 시 무한 대기 → 커넥션 풀 고갈 위험 -->
+        <setting name="defaultStatementTimeout" value="30"/>
+
+        <!-- null 값을 DB에 넣을 때 JDBC 타입 명시. -->
+        <setting name="jdbcTypeForNull" value="NULL"/>
+
+        <!-- 지연 로딩 비활성화 명시 (기본값이지만 의도를 명확히 표현) -->
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
     </settings>
 
     <typeHandlers>
