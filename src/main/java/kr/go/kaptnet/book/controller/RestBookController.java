@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.go.kaptnet.book.dto.BookDto;
 import kr.go.kaptnet.book.dto.BookSearchCondition;
-import kr.go.kaptnet.book.mapper.BookMapper;
+import kr.go.kaptnet.book.exception.BookNotFoundException;
+import kr.go.kaptnet.book.service.BookService;
 import kr.go.kaptnet.common.success.KapaApiResponse;
+import kr.go.kaptnet.common.error.KapaApiErrorResponse;
+import kr.go.kaptnet.common.error.KapaErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +26,13 @@ import java.util.List;
 @Tag(name = "도서 API", description = "도서 REST API - MyBatis 핵심 기능 예시")
 public class RestBookController {
 
-    private final BookMapper bookMapper;
+    private final BookService bookService;
 
     @GetMapping
     @Operation(summary = "전체 도서 목록 조회", description = "resultType 사용 - 단순 1:1 매핑 예시")
     @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookDto.class))))
     public KapaApiResponse<List<BookDto>> getAllBooks() {
-        List<BookDto> books = bookMapper.findAll();
+        List<BookDto> books = bookService.getAllBooks();
         return KapaApiResponse.of(books);
     }
 
@@ -40,7 +43,7 @@ public class RestBookController {
     })
     public KapaApiResponse<BookDto> getBookById(
             @Parameter(description = "도서 ID") @PathVariable Long id) {
-        BookDto book = bookMapper.findById(id);
+        BookDto book = bookService.getBookById(id);
         return KapaApiResponse.of(book);
     }
 
@@ -49,7 +52,12 @@ public class RestBookController {
     @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookDto.class))))
     public KapaApiResponse<List<BookDto>> searchBooks(
             @Parameter(description = "검색 조건") BookSearchCondition condition) {
-        List<BookDto> books = bookMapper.search(condition);
+        List<BookDto> books = bookService.searchBooks(condition);
         return KapaApiResponse.of(books);
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public KapaApiErrorResponse handleBookNotFound(BookNotFoundException ex) {
+        return KapaApiErrorResponse.of(KapaErrorCode.BUSINESS_ERROR, ex.getMessage());
     }
 }
