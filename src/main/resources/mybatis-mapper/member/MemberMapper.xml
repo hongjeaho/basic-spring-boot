@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.kaptnet.member.mapper.MemberMapper">
+
+    <!-- resultMap + collection 예시: N+1 문제 해결 -->
+    <resultMap id="memberWithLoansMap" type="kr.go.kaptnet.member.dto.MemberWithLoansDto">
+        <!-- <id> 태그: PK를 지정하여 동일한 객체인지 판단 (JOIN 결과 그룹화의 핵심) -->
+        <id property="id" column="member_id"/>
+        <result property="name" column="member_name"/>
+        <result property="email" column="member_email"/>
+        <result property="createdAt" column="member_created_at"/>
+        <result property="updatedAt" column="member_updated_at"/>
+
+        <!-- <collection> 태그: 1:N 관계 (회원 한 명의 여러 대출기록) -->
+        <collection property="loans" ofType="kr.go.kaptnet.loan.dto.LoanDto">
+            <id property="id" column="loan_id"/>
+            <result property="memberId" column="loan_member_id"/>
+            <result property="bookId" column="loan_book_id"/>
+            <result property="loanDate" column="loan_date"/>
+            <result property="returnDate" column="return_date"/>
+        </collection>
+    </resultMap>
+
+    <!-- JOIN으로 한 번에 조회 - N+1 문제 해결 -->
+    <select id="findWithLoansById" resultMap="memberWithLoansMap">
+        SELECT
+            m.id          AS member_id,
+            m.name        AS member_name,
+            m.email       AS member_email,
+            m.created_at  AS member_created_at,
+            m.updated_at  AS member_updated_at,
+            l.id          AS loan_id,
+            l.member_id   AS loan_member_id,
+            l.book_id     AS loan_book_id,
+            l.loan_date   AS loan_date,
+            l.return_date AS return_date
+        FROM members m
+        LEFT JOIN loans l ON m.id = l.member_id
+        WHERE m.id = #{id}
+    </select>
+
+</mapper>

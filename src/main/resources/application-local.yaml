@@ -5,6 +5,18 @@ spring:
     locations: classpath:db/migration
     placeholder-replacement: true
 
+springdoc:
+  packages-to-scan: kr.go.kaptnet
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    path: /api/public/api-docs/json
+  swagger-ui:
+    path: /public/swagger-ui
+    disable-swagger-default-url: true #기본 Swagger Petstore URL을 어떻게 비활성화
+    display-request-duration: true # API 응답 시간의 표시
+    operations-sorter: alpha
+
 kapa:
   domain:
     datasource:
