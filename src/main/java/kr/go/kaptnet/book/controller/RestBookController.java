@@ -57,11 +57,22 @@ public class RestBookController {
         return KapaApiResponse.of(books);
     }
 
-    @PostMapping("/advanced-search")
-    @Operation(summary = "도서 고급 검색 (CDATA 예시)", description = "CDATA 사용 - XML 특수 문자(&lt;, &gt;, &amp;) 처리 예시")
+    @GetMapping("/advanced-search")
+    @Operation(summary = "도서 고급 검색 (CDATA 예시)", description = "CDATA 사용 - XML 특수 문자(&lt;, &gt;, &amp;) 및 비교 연산자 처리 예시")
     @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookDto.class))))
     public KapaApiResponse<List<BookDto>> advancedSearch(
-            @Parameter(description = "고급 검색 조건") @RequestBody BookSearchRequest request) {
+            @Parameter(description = "도서 제목") @RequestParam(required = false) String title,
+            @Parameter(description = "저자") @RequestParam(required = false) String author,
+            @Parameter(description = "카테고리") @RequestParam(required = false) String category,
+            @Parameter(description = "최소 ID") @RequestParam(required = false) Long minId,
+            @Parameter(description = "최대 ID") @RequestParam(required = false) Long maxId) {
+        BookSearchRequest request = BookSearchRequest.builder()
+                .title(title)
+                .author(author)
+                .category(category)
+                .minId(minId)
+                .maxId(maxId)
+                .build();
         List<BookDto> books = bookService.advancedSearch(request);
         return KapaApiResponse.of(books);
     }
