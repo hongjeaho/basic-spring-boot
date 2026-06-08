@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.go.kaptnet.book.dto.BookDto;
 import kr.go.kaptnet.book.dto.BookSearchCondition;
+import kr.go.kaptnet.book.dto.BookSearchRequest;
 import kr.go.kaptnet.book.exception.BookNotFoundException;
 import kr.go.kaptnet.book.service.BookService;
 import kr.go.kaptnet.common.success.KapaApiResponse;
@@ -53,6 +54,15 @@ public class RestBookController {
     public KapaApiResponse<List<BookDto>> searchBooks(
             @Parameter(description = "검색 조건") BookSearchCondition condition) {
         List<BookDto> books = bookService.searchBooks(condition);
+        return KapaApiResponse.of(books);
+    }
+
+    @PostMapping("/advanced-search")
+    @Operation(summary = "도서 고급 검색 (CDATA 예시)", description = "CDATA 사용 - XML 특수 문자(&lt;, &gt;, &amp;) 처리 예시")
+    @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookDto.class))))
+    public KapaApiResponse<List<BookDto>> advancedSearch(
+            @Parameter(description = "고급 검색 조건") @RequestBody BookSearchRequest request) {
+        List<BookDto> books = bookService.advancedSearch(request);
         return KapaApiResponse.of(books);
     }
 

@@ -2,6 +2,7 @@ package kr.go.kaptnet.book.service;
 
 import kr.go.kaptnet.book.dto.BookDto;
 import kr.go.kaptnet.book.dto.BookSearchCondition;
+import kr.go.kaptnet.book.dto.BookSearchRequest;
 import kr.go.kaptnet.book.exception.BookNotFoundException;
 import kr.go.kaptnet.book.mapper.BookMapper;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,9 @@ public class BookService {
 
     public List<BookDto> searchBooks(BookSearchCondition condition) {
         return bookMapper.search(condition);
+    }
+
+    public List<BookDto> advancedSearch(BookSearchRequest request) {
+        return bookMapper.advancedSearch(request);
     }
 }

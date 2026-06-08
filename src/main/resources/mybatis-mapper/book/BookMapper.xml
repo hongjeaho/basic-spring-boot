@@ -52,4 +52,35 @@
         ORDER BY id
     </select>
 
+    <!-- CDATA 예시: XML 특수 문자 처리 (< > & " ') 및 비교 연산자 -->
+    <select id="advancedSearch" resultType="kr.go.kaptnet.book.dto.BookDto">
+        <![CDATA[
+            SELECT
+                id,
+                title,
+                author,
+                category,
+                created_at AS createdAt,
+                updated_at AS updatedAt
+            FROM books
+            WHERE 1=1
+        ]]>
+        <if test="title != null and title != ''">
+            <![CDATA[ AND title LIKE CONCAT('%', #{title}, '%') ]]>
+        </if>
+        <if test="author != null and author != ''">
+            <![CDATA[ AND author LIKE CONCAT('%', #{author}, '%') ]]>
+        </if>
+        <if test="category != null and category != ''">
+            <![CDATA[ AND category = #{category} ]]>
+        </if>
+        <if test="minId != null">
+            <![CDATA[ AND id >= #{minId} ]]>
+        </if>
+        <if test="maxId != null">
+            <![CDATA[ AND id <= #{maxId} ]]>
+        </if>
+        ORDER BY id
+    </select>
+
 </mapper>
