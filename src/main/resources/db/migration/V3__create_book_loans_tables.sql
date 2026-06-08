@@ -38,20 +38,18 @@ CREATE INDEX idx_loans_book_id ON loans(book_id);
 CREATE INDEX idx_loans_date ON loans(loan_date);
 
 -- 샘플 데이터
-INSERT INTO books (title, author, category) VALUES
-('Clean Code', 'Robert C. Martin', 'PROGRAMMING'),
-('Effective Java', 'Joshua Bloch', 'PROGRAMMING'),
-('Design Patterns', 'Gang of Four', 'PROGRAMMING'),
-('The Pragmatic Programmer', 'Andy Hunt', 'PROGRAMMING'),
-('Introduction to Algorithms', 'Thomas H. Cormen', 'ALGORITHM');
+INSERT INTO books (id, title, author, category, created_at, updated_at) VALUES (1, '토비의 스프링 3.1', '이일만', 'PROGRAMMING', '2026-06-08 21:04:28', '2026-06-09 08:03:36');
+INSERT INTO books (id, title, author, category, created_at, updated_at) VALUES (2, 'Effective Java', 'Joshua Bloch', 'PROGRAMMING', '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+INSERT INTO books (id, title, author, category, created_at, updated_at) VALUES (3, 'Design Patterns', 'Gang of Four', 'PROGRAMMING', '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+INSERT INTO books (id, title, author, category, created_at, updated_at) VALUES (4, '클로드 코드 마스터', '이남희, 백승현', 'PROGRAMMING', '2026-06-08 21:04:28', '2026-06-09 08:04:09');
+INSERT INTO books (id, title, author, category, created_at, updated_at) VALUES (5, '하네스 엔지니어링 with 클로드 코드', '황민호', 'ALGORITHM', '2026-06-08 21:04:28', '2026-06-09 08:05:14');
 
-INSERT INTO members (name, email) VALUES
-('Hong Jae Ho', 'hongjaeho@example.com'),
-('Kim Min Su', 'kang@example.com'),
-('Lee Ji Eun', 'jieun@example.com');
+INSERT INTO members (id, name, email, created_at, updated_at) VALUES (1, '홍재호1', 'hongjaeho1@example.com', '2026-06-08 21:04:28', '2026-06-09 08:06:14');
+INSERT INTO members (id, name, email, created_at, updated_at) VALUES (2, '홍재호2', 'hongjaeho2@example.com', '2026-06-08 21:04:28', '2026-06-09 08:06:14');
+INSERT INTO members (id, name, email, created_at, updated_at) VALUES (3, '홍재호3', 'hongjaeho3@example.com', '2026-06-08 21:04:28', '2026-06-09 08:06:14');
 
-INSERT INTO loans (member_id, book_id, loan_date, return_date) VALUES
-(1, 1, '2026-06-01', '2026-06-15'),
-(1, 2, '2026-06-05', NULL),
-(2, 3, '2026-06-03', '2026-06-10'),
-(3, 4, '2026-06-07', NULL);
+INSERT INTO loans (id, member_id, book_id, loan_date, return_date, created_at, updated_at) VALUES (1, 1, 1, '2026-06-01', '2026-06-15', '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+INSERT INTO loans (id, member_id, book_id, loan_date, return_date, created_at, updated_at) VALUES (2, 1, 2, '2026-06-05', null, '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+INSERT INTO loans (id, member_id, book_id, loan_date, return_date, created_at, updated_at) VALUES (3, 2, 3, '2026-06-03', '2026-06-10', '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+INSERT INTO loans (id, member_id, book_id, loan_date, return_date, created_at, updated_at) VALUES (4, 3, 4, '2026-06-07', null, '2026-06-08 21:04:28', '2026-06-08 21:04:28');
+
