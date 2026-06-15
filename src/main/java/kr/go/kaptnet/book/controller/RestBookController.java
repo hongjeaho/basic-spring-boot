@@ -11,11 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.go.kaptnet.book.dto.BookDto;
 import kr.go.kaptnet.book.dto.BookSearchCondition;
 import kr.go.kaptnet.book.dto.BookSearchRequest;
-import kr.go.kaptnet.book.exception.BookNotFoundException;
 import kr.go.kaptnet.book.service.BookService;
 import kr.go.kaptnet.common.success.KapaApiResponse;
-import kr.go.kaptnet.common.error.KapaApiErrorResponse;
-import kr.go.kaptnet.common.error.KapaErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,10 +72,5 @@ public class RestBookController {
                 .build();
         List<BookDto> books = bookService.advancedSearch(request);
         return KapaApiResponse.of(books);
-    }
-
-    @ExceptionHandler(BookNotFoundException.class)
-    public KapaApiErrorResponse handleBookNotFound(BookNotFoundException ex) {
-        return KapaApiErrorResponse.of(KapaErrorCode.BUSINESS_ERROR, ex.getMessage());
     }
 }

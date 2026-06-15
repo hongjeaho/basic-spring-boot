@@ -9,11 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.go.kaptnet.loan.dto.LoanDetailDto;
 import kr.go.kaptnet.loan.dto.LoanDto;
-import kr.go.kaptnet.loan.exception.LoanNotFoundException;
 import kr.go.kaptnet.loan.service.LoanService;
 import kr.go.kaptnet.common.success.KapaApiResponse;
-import kr.go.kaptnet.common.error.KapaApiErrorResponse;
-import kr.go.kaptnet.common.error.KapaErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +40,5 @@ public class RestLoanController {
             @Parameter(description = "회원 ID 리스트") @RequestParam List<Long> ids) {
         List<LoanDto> loans = loanService.getLoansByMemberIds(ids);
         return KapaApiResponse.of(loans);
-    }
-
-    @ExceptionHandler(LoanNotFoundException.class)
-    public KapaApiErrorResponse handleLoanNotFound(LoanNotFoundException ex) {
-        return KapaApiErrorResponse.of(KapaErrorCode.BUSINESS_ERROR, ex.getMessage());
     }
 }

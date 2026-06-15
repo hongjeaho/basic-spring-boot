@@ -20,6 +20,7 @@ import lombok.Setter;
 @Schema(name = "ApiErrorResponse", title = "에러 응답")
 public class KapaApiErrorResponse {
 
+	@Builder.Default
 	private boolean success = false;
 	private ErrorBody error;
 	private LocalDateTime timestamp;

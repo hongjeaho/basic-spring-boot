@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.go.kaptnet.common.error.KapaApiErrorResponse;
-import kr.go.kaptnet.common.error.KapaErrorCode;
 import kr.go.kaptnet.member.dto.MemberWithLoansDto;
-import kr.go.kaptnet.member.exception.MemberNotFoundException;
 import kr.go.kaptnet.member.service.MemberService;
 import kr.go.kaptnet.common.success.KapaApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +27,5 @@ public class RestMemberController {
             @Parameter(description = "회원 ID") @PathVariable Long id) {
         MemberWithLoansDto member = memberService.getMemberWithLoans(id);
         return KapaApiResponse.of(member);
-    }
-
-    @ExceptionHandler(MemberNotFoundException.class)
-    public KapaApiErrorResponse handleMemberNotFound(MemberNotFoundException ex) {
-        return KapaApiErrorResponse.of(KapaErrorCode.BUSINESS_ERROR, ex.getMessage());
     }
 }

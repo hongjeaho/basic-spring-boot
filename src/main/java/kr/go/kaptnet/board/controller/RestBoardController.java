@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.go.kaptnet.board.dto.*;
-import kr.go.kaptnet.board.exception.BoardNotFoundException;
 import kr.go.kaptnet.board.service.BoardService;
-import kr.go.kaptnet.common.error.KapaApiErrorResponse;
-import kr.go.kaptnet.common.error.KapaErrorCode;
 import kr.go.kaptnet.common.success.KapaApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -76,10 +73,5 @@ public class RestBoardController {
     public KapaApiResponse<Void> deleteBoard(@PathVariable Long id) {
         boardService.deleteBoard(id);
         return KapaApiResponse.of(null);
-    }
-
-    @ExceptionHandler(BoardNotFoundException.class)
-    public KapaApiErrorResponse handleBoardNotFound(BoardNotFoundException ex) {
-        return KapaApiErrorResponse.of(KapaErrorCode.BUSINESS_ERROR, ex.getMessage());
     }
 }
