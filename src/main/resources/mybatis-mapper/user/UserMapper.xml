@@ -5,8 +5,31 @@
 
 <mapper namespace="kr.go.kaptnet.user.mapper.UserMapper">
 
-  <select id="findUserIdByUserId" resultType="kr.go.kaptnet.auth.dto.AuthUser">
-    select user_id from user where user_id = #{userid}
+  <resultMap id="authUserResultMap" type="kr.go.kaptnet.auth.dto.AuthUser">
+    <id     property="seq"       column="seq"/>
+    <result property="userEmail" column="user_email"/>
+    <result property="userId"    column="user_id"/>
+    <result property="name"      column="user_name"/>
+    <result property="password"  column="user_password"/>
+    <collection property="roles" ofType="kr.go.kaptnet.auth.dto.BasicAuthority">
+      <result property="userSeq" column="user_seq"/>
+      <result property="role"    column="user_role_name"/>
+    </collection>
+  </resultMap>
+
+  <select id="findByUserId" resultMap="authUserResultMap">
+    SELECT
+        u.seq,
+        u.user_email,
+        u.user_id,
+        u.user_name,
+        u.user_password,
+        ur.user_seq,
+        r.user_role_name
+    FROM users u
+    LEFT JOIN user_roles ur ON u.seq = ur.user_seq
+    LEFT JOIN roles r       ON ur.role_seq = r.seq
+    WHERE u.user_id = #{userId}
   </select>
 
 </mapper>

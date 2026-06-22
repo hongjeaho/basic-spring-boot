@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ public class AuthUser implements UserDetails {
 
 	@Schema(description = "권한정보")
 	@Builder.Default
-	private Set<BasicAuthority> roles = Collections.emptySet();
+	private Set<BasicAuthority> roles = new HashSet<>();
 
 	public AuthUser(Long seq, String userEmail, String userId, String userPassword, String userName) {
 		this.seq = seq;

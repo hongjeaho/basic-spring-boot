@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-	AuthUser findUserIdByUserId(String userid);
+	AuthUser findByUserId(String userId);
 }
