@@ -1,4 +1,4 @@
-package kr.go.kaptnet.auth.service;
+package kr.go.kaptnet.config.service;
 
 import kr.go.kaptnet.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userMapper.findUserIdByUserId(username);
+		return userMapper.findByUserId(username);
 	}
 }

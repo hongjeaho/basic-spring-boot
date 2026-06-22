@@ -11,12 +11,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -71,42 +76,34 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		// 모든 요청을 인증 없이 통과
 		http
-			.csrf(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(authorizeRequests ->
-					authorizeRequests.anyRequest().permitAll()
-			);
-
-		// 인증이 필요한 경우
-//		http
-//				.csrf(AbstractHttpConfigurer::disable)  // CSRF(Cross-Site Request Forgery) 보호를 비활성화
-//				.cors(security -> security.configurationSource(corsConfigurationSource())) // cors 설정
-//				.headers(headers -> headers
-//						.frameOptions(FrameOptionsConfig::deny) // Clickjacking 방지 (X-Frame-Options: DENY)
-//						.xssProtection(xss -> xss  // XSS 공격 방지
-//								.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-//						.contentTypeOptions(Customizer.withDefaults()) // MIME 스니핑 방지
-//						.referrerPolicy(referrer -> referrer  // Referrer 정책
-//								.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-//						.contentSecurityPolicy(csp ->
-//								csp.policyDirectives("default-src 'self'; script-src 'self'; object-src 'none'"))
-//				)
-//				.exceptionHandling(security -> {
-//					security.authenticationEntryPoint(restAuthenticationEntryPoint());
-//					security.accessDeniedHandler(accessDeniedHandler());
-//				})
-//				.sessionManagement(session ->   // 세션 관리 정책을 설정
-//						session.sessionCreationPolicy(
-//								SessionCreationPolicy.STATELESS)) //  상태 없는(stateless) API로 동작
-//				.authorizeHttpRequests(authorizeRequests ->
-//						authorizeRequests
-//								.requestMatchers("/public/swagger-ui/**").permitAll()
-//								// Actuator 보안 강화: health 엔드포인트만 공개, 나머지는 인증 필요
-//								.requestMatchers("/public/kapanet/actuator/health", "/public/kapanet/actuator/health/**").permitAll()
-//								.requestMatchers("/public/kapanet/actuator/**").authenticated()
-//								.requestMatchers("/error", "/api/public/**").permitAll() // 인증 없이 접근 설정
-//								.anyRequest().authenticated()); //  모든 요청에 대해 인증을 요구하도록 설정
+				.csrf(AbstractHttpConfigurer::disable)  // CSRF(Cross-Site Request Forgery) 보호를 비활성화
+				.cors(security -> security.configurationSource(corsConfigurationSource())) // cors 설정
+				.headers(headers -> headers
+						.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny) // Clickjacking 방지 (X-Frame-Options: DENY)
+						.xssProtection(xss -> xss  // XSS 공격 방지
+								.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+						.contentTypeOptions(Customizer.withDefaults()) // MIME 스니핑 방지
+						.referrerPolicy(referrer -> referrer  // Referrer 정책
+								.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+						.contentSecurityPolicy(csp ->
+								csp.policyDirectives("default-src 'self'; script-src 'self'; object-src 'none'"))
+				)
+				.exceptionHandling(security -> {
+					security.authenticationEntryPoint(restAuthenticationEntryPoint());
+					security.accessDeniedHandler(accessDeniedHandler());
+				})
+				.sessionManagement(session ->   // 세션 관리 정책을 설정
+						session.sessionCreationPolicy(
+								SessionCreationPolicy.STATELESS)) //  상태 없는(stateless) API로 동작
+				.authorizeHttpRequests(authorizeRequests ->
+						authorizeRequests
+								.requestMatchers("/public/swagger-ui/**").permitAll()
+								// Actuator 보안 강화: health 엔드포인트만 공개, 나머지는 인증 필요
+								.requestMatchers("/public/kapanet/actuator/health", "/public/kapanet/actuator/health/**").permitAll()
+								.requestMatchers("/public/kapanet/actuator/**").authenticated()
+								.requestMatchers("/error", "/api/public/**").permitAll() // 인증 없이 접근 설정
+								.anyRequest().authenticated()); //  모든 요청에 대해 인증을 요구하도록 설정
 
 		// JWT 토큰 검증 처리
 		http.addFilterBefore(customHeaderFilter, UsernamePasswordAuthenticationFilter.class);

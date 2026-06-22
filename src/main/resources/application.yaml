@@ -23,3 +23,16 @@ jwt:
   expiration:
     period: 86400000 # 24 * 60 * 60 * 1000 (하루)
     renew-before: 3600000 # 1 * 60 * 60 * 1000 (한시간)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /public/kapanet/actuator
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+      probes:
+        enabled: true
